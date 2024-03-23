@@ -16,6 +16,8 @@ free(), exit()함수 사용 시--> #include<stdlib.h>
 "모든 열려진 파일" 자동으로 닫음.
 출력 버퍼속에 데이터가 있으면 그것을 쓰기 완료시킴.
 즉, "모든 것을 정리 후 프로그램을 종료함"
+
+#include <stdlib.h>를 작성하지않으면 결과가 제대로 출력되지 않음
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +36,9 @@ int main()
     if(t==NULL)exit(1);
     t->num = 100;
     strcpy(t->ch, "Just testing");
-    free(t);
+  	printf("%d\n", t->num);
+	  printf("%s", t->num);
+	  free(t);
     
 
     return 0;
