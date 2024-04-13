@@ -10,26 +10,26 @@ typedef struct {
 
 typedef struct {
     element* data;
-    int rows;//0À» Á¦¿ÜÇÑ °ªÀÇ Çà À§Ä¡¸¦ ÀúÀåÇÏ´Â º¯¼ö
-    int cols;//0À» Á¦¿ÜÇÑ °ªÀÇ ¿­ À§Ä¡¸¦ ÀúÀåÇÏ´Â º¯¼ö
-    int index; //Ç×ÀÇ °³¼ö
+    int rows;//0ì„ ì œì™¸í•œ ê°’ì˜ í–‰ ìœ„ì¹˜ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
+    int cols;//0ì„ ì œì™¸í•œ ê°’ì˜ ì—´ ìœ„ì¹˜ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
+    int index; //í•­ì˜ ê°œìˆ˜
 }SparseMatrix;
 
 
-int** make2DMatrix(int rows, int cols) { //2Â÷¿ø¹è¿­ µ¿ÀûÇÒ´ç ÇÔ¼ö
-    int** arr = (int**)malloc(sizeof(int*) * rows); //Çà
-    for (int i = 0; i < rows; i++) { //¿­
+int** make2DMatrix(int rows, int cols) { //2ì°¨ì›ë°°ì—´ ë™ì í• ë‹¹ í•¨ìˆ˜
+    int** arr = (int**)malloc(sizeof(int*) * rows); //í–‰
+    for (int i = 0; i < rows; i++) { //ì—´
         arr[i] = (int*)malloc(sizeof(int) * cols);
     }
     return arr;
 }
-void sparse2DMatrix(int** arr, SparseMatrix *matrix, int rows, int cols) { //0ÀÌ ¾Æ´Ñ °ª¸¸ ÀúÀåÇÏ´Â 2Â÷¿ø ¹è¿­
-    int index = 0;//°ªÀ» ¾ó¸¶³ª ÀúÀåÇß´ÂÁö ¾Ë¾Æ³¾ ÀåÄ¡j
+void sparse2DMatrix(int** arr, SparseMatrix *matrix, int rows, int cols) { //0ì´ ì•„ë‹Œ ê°’ë§Œ ì €ì¥í•˜ëŠ” 2ì°¨ì› ë°°ì—´
+    int index = 0;//ê°’ì„ ì–¼ë§ˆë‚˜ ì €ì¥í–ˆëŠ”ì§€ ì•Œì•„ë‚¼ ì¥ì¹˜j
     int i = 0;
     int j = 0;
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
-            if (arr[i][j] != 0) { //ÀúÀåÇÑ 2Â÷¿ø Çà·Ä¿¡¼­ °ªÀÌ 0ÀÌ ¾Æ´Ï¶ó¸é Çà,¿­,°ªÀ» ÀúÀåÇÔ
+            if (arr[i][j] != 0) { //ì €ì¥í•œ 2ì°¨ì› í–‰ë ¬ì—ì„œ ê°’ì´ 0ì´ ì•„ë‹ˆë¼ë©´ í–‰,ì—´,ê°’ì„ ì €ì¥í•¨
                 matrix->data[index].rows = i;
                 matrix->data[index].cols = j;
                 matrix->data[index].value = arr[i][j];
@@ -41,22 +41,22 @@ void sparse2DMatrix(int** arr, SparseMatrix *matrix, int rows, int cols) { //0ÀÌ
         }
     }
 }
-void input2DMatrixValue(int** arr, int rows, int cols) { // »ç¿ëÀÚ·ÎºÎÅÍ °ª ÀÔ·Â¹Ş´Â ÇÔ¼ö
+void input2DMatrixValue(int** arr, int rows, int cols) { // ì‚¬ìš©ìë¡œë¶€í„° ê°’ ì…ë ¥ë°›ëŠ” í•¨ìˆ˜
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            printf("Çà%d, ¿­%d¿¡ µé¾î°¥ °ª>>", i, j);
+            printf("í–‰%d, ì—´%dì— ë“¤ì–´ê°ˆ ê°’>>", i, j);
             scanf("%d", &arr[i][j]);
         }
     }
 }
-void print_sparseMatrix(SparseMatrix *matrix) { //0ÀÌ ¾Æ´Ñ °ª¸¸ ÀúÀåÇÑ 2Â÷¿ø Çà·ÄÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+void print_sparseMatrix(SparseMatrix *matrix) { //0ì´ ì•„ë‹Œ ê°’ë§Œ ì €ì¥í•œ 2ì°¨ì› í–‰ë ¬ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     for (int i = 0; i < matrix->index; i++) {
         printf("matrix[%d][%d] = %d", matrix->data[i].rows, matrix->data[i].cols, matrix->data[i].value);
         printf("\n");
     }
     printf("\n");
 }
-void print2DMatrix(int** arr, int rows, int cols) { //Çà·Ä ÀüÃ¼¸¦ ÀúÀåÇÑ Çà·ÄÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+void print2DMatrix(int** arr, int rows, int cols) { //í–‰ë ¬ ì „ì²´ë¥¼ ì €ì¥í•œ í–‰ë ¬ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     for (int i = 0; i < rows; i++) {
         printf("\n");
         for (int j = 0; j < cols; j++) {
@@ -66,10 +66,10 @@ void print2DMatrix(int** arr, int rows, int cols) { //Çà·Ä ÀüÃ¼¸¦ ÀúÀåÇÑ Çà·ÄÀ» 
     printf("\n");
 }
 void printMemoryUsage(int rows, int cols, SparseMatrix *matrix) {
-    int size_2DMatrix = sizeof(int) * rows * cols; // 2Â÷¿ø ¹è¿­ÀÇ ¸Ş¸ğ¸® Å©±â °è»ê
-    int size_elementMatrix = sizeof(element) * (matrix->index);//sizeof(int) *(matrix.rows) * (matrix.cols); // 0À» Á¦¿ÜÇÑ Ç×¸¸ ÀúÀåÇÑ ±¸Á¶Ã¼ ¹è¿­ÀÇ ¸Ş¸ğ¸® Å©±â °è»ê
-    printf("2Â÷¿ø ¹è¿­ÀÌ »ç¿ëÇÑ ¸Ş¸ğ¸® Å©±â: %d ¹ÙÀÌÆ®\n", size_2DMatrix);
-    printf("0ÀÌ ¾Æ´Ñ ¿ä¼Ò¸¸ ÀúÀåÇÑ ¹è¿­ÀÌ »ç¿ëÇÑ ¸Ş¸ğ¸® Å©±â: %d ¹ÙÀÌÆ®\n", size_elementMatrix);
+    int size_2DMatrix = sizeof(int) * rows * cols; // 2ì°¨ì› ë°°ì—´ì˜ ë©”ëª¨ë¦¬ í¬ê¸° ê³„ì‚°
+    int size_elementMatrix = sizeof(element) * (matrix->index);//sizeof(int) *(matrix.rows) * (matrix.cols); // 0ì„ ì œì™¸í•œ í•­ë§Œ ì €ì¥í•œ êµ¬ì¡°ì²´ ë°°ì—´ì˜ ë©”ëª¨ë¦¬ í¬ê¸° ê³„ì‚°
+    printf("2ì°¨ì› ë°°ì—´ì´ ì‚¬ìš©í•œ ë©”ëª¨ë¦¬ í¬ê¸°: %d ë°”ì´íŠ¸\n", size_2DMatrix);
+    printf("0ì´ ì•„ë‹Œ ìš”ì†Œë§Œ ì €ì¥í•œ ë°°ì—´ì´ ì‚¬ìš©í•œ ë©”ëª¨ë¦¬ í¬ê¸°: %d ë°”ì´íŠ¸\n", size_elementMatrix);
 }
 void printMatrixMemoryAddress(int **arr, int rows, int cols) {
     int count = 0;
@@ -84,17 +84,17 @@ void printMatrixMemoryAddress(int **arr, int rows, int cols) {
         }
     }
 }
-void run2DMatrixSystem() { //Çà·ÄÀ» ´Ù·ç´Â ½Ã½ºÅÛÀ» ½ÃÀÛÇÏ´Â ÇÔ¼ö
+void run2DMatrixSystem() { //í–‰ë ¬ì„ ë‹¤ë£¨ëŠ” ì‹œìŠ¤í…œì„ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     int rows;
     int cols;
     int choice;
     while (1) {
-        printf("1: Çà·ÄÇÁ·Î±×·¥ ½ÃÀÛ, 2: Á¾·á >>");
+        printf("1: í–‰ë ¬í”„ë¡œê·¸ë¨ ì‹œì‘, 2: ì¢…ë£Œ >>");
         scanf("%d", &choice);
         if (choice == 2) break;
-        printf("ÀúÀåÇÒ 2Â÷¿ø Çà·ÄÀÇ Çà°ú ¿­ÀÇ ¼ö¸¦ ÀÔ·ÂÇÏ½Ã¿À>>");
+        printf("ì €ì¥í•  2ì°¨ì› í–‰ë ¬ì˜ í–‰ê³¼ ì—´ì˜ ìˆ˜ë¥¼ ì…ë ¥í•˜ì‹œì˜¤>>");
         scanf("%d %d", &rows, &cols);
-        if (choice == 1) { //Çà·Ä ÀüÃ¼¸¦ ÀúÀå, 0ÀÌ ¾Æ´Ñ Ç×¸¸ ÀúÀåÈÄ Çà·Ä Ãâ·Â°ú ÇÔ²² ¸Ş¸ğ¸® »ç¿ë·® Ãâ·Â
+        if (choice == 1) { //í–‰ë ¬ ì „ì²´ë¥¼ ì €ì¥, 0ì´ ì•„ë‹Œ í•­ë§Œ ì €ì¥í›„ í–‰ë ¬ ì¶œë ¥ê³¼ í•¨ê»˜ ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰ ì¶œë ¥
             int** arr = make2DMatrix(rows, cols);
             input2DMatrixValue(arr, rows, cols);
             print2DMatrix(arr, rows, cols);
