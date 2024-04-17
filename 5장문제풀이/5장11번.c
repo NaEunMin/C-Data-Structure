@@ -35,107 +35,11 @@ delete_rear구현 시
 위 코드처럼 가야하는데 temp안하고 return q->data[q->rear]이렇게 작성하면 삭제 후 그 다음 문자를 리턴하기 때문이다.
 
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define MAX_QUEUE_SIZE 100
-
-typedef char element;
-typedef struct{
-    element data[MAX_QUEUE_SIZE];
-    int front, rear;
-} DequeType;
-
-void init_deque(DequeType *q){
-    q->front = q->rear = 0;
-}
-element is_empty(DequeType *q){
-    return (q->front == q->rear);
-}
-element is_full(DequeType *q){
-    return (q->front == (q->rear+1)%MAX_QUEUE_SIZE);
-}
-
-void add_rear(DequeType *q, element item){
-    if(is_full(q)){
-        fprintf(stderr, "덱 포화 에러\n");
-        exit(1);
-    }
-    else{
-        q->rear = (q->rear+1) % MAX_QUEUE_SIZE;
-        q->data[(q->rear)] = item;
-    }
-}
-element delete_rear(DequeType *q){
-    int temp;
-    if(is_empty(q)){
-        fprintf(stderr, "덱 공백 에러\n");
-        exit(1);
-    }
-    else{
-        int temp = q->rear;
-        q->rear = ((q->rear-1)+MAX_QUEUE_SIZE)%MAX_QUEUE_SIZE;
-        return q->data[temp];
-    }
-}
-element get_rear(DequeType *q){
-    if(is_empty(q)){
-        fprintf(stderr, "덱 공백 에러\n");
-        exit(1);
-    }
-    else{
-        return q->data[(q->rear)];
-    }
-}
-
-void add_front(DequeType *q, element item){
-    if(is_full(q)){
-        fprintf(stderr, "덱 포화 에러\n");
-        exit(1);
-    }
-    else{
-        q->data[(q->front)] = item;
-        q->front = ((q->front-1)+MAX_QUEUE_SIZE)%MAX_QUEUE_SIZE;
-    }
-}
-element delete_front(DequeType *q){
-    if(is_empty(q)){
-        fprintf(stderr, "덱 공백 에러\n");
-        exit(1);
-    }
-    else{
-        q->front = (q->front+1)%MAX_QUEUE_SIZE;
-        return q->data[(q->front)];
-    }
-}
-element get_front(DequeType *q){
-    if(is_empty(q)){
-        fprintf(stderr, "덱 공백 에러\n");
-        exit(1);
-    }
-    else{
-        return q->data[(q->front)];
-    }
-}
-void strlwr(char str[]){ //웹 컴파일러는 지원을 안해서 웹서핑해서 가져옴
-    int i=0;
-    while(str[i]){
-        if(str[i]>='A' && str[i]<='Z'){
-            str[i]=str[i]+32;
-        }       
-        i++;
-    }
-}
-int main()
-{
-    DequeType q;
-    init_deque(&q);
-    char input[MAX_QUEUE_SIZE] = {};
-    printf("회문인지 검사할 문자열 >>");
-    scanf("%s",input);
-    strlwr(input);
-    
-    int length=0; //옮긴 문자열의 크기
+//strlwr 오류를 무시하기 위해 #define _CRT_NONSTDC_NO_WARNINGS를 적어주었다.
+//이전에 적은 코드보다 더 이해하기 쉬운 코드로 풀어서 다시 코드를 업로드하였다.
+//이전의 코드
+/* 
+      int length=0; //옮긴 문자열의 크기
     int check;
     for(int i=0; i<strlen(input); i++){ //input길이 만큼 반복문 실행
         if('a'<= input[i] && 'z'>= input[i]){ //소문자알파벳만 다루는 조건문
@@ -158,4 +62,93 @@ int main()
         printf("회문입니다.");
     }
     return 0;
+*/
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_QUEUE_SIZE 10
+typedef char element;
+typedef struct {
+	element data[MAX_QUEUE_SIZE];
+	int front;
+	int rear;
+}QueueType;
+void error(char* s) {
+	fprintf(stderr, "%s", s);
+	exit(1);
+}
+void init_queue(QueueType* q) {
+	q->front = q->rear = 0;
+}
+int is_empty(QueueType* q) {
+	return q->front == q->rear;
+}
+int is_full(QueueType* q) {
+	return (q->rear + 1) % MAX_QUEUE_SIZE == q->front;
+}
+void add_rear(QueueType* q, element item) {
+	if (is_full(q)) {
+		error("큐 포화 에러");
+	}
+	q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;
+	q->data[q->rear] = item;
+}
+void add_front(QueueType* q,  element item) {
+	if (is_full(q)) {
+		error("큐 포화 에러");
+	}
+	q->data[q->front] = item;
+	q->front = (q->front - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
+}
+element delete_rear(QueueType* q) {
+	if (is_empty(q)) {
+		error("큐 공백 에러");
+	}
+	int index = q->rear;
+	q->rear = (q->rear - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
+	return q->data[index];
+}
+element delete_front(QueueType* q) {
+	if (is_empty(q)) {
+		error("큐 공백 에러");
+	}
+	q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+	return q->data[q->front];
+}
+element get_rear(QueueType* q) {
+	if (is_empty(q)) {
+		error("큐 공백 에러");
+	}
+	return q->data[q->rear];
+}
+element get_front(QueueType* q) {
+	if(is_empty(q)) {
+		error("큐 공백 에러");
+	}
+	return q->data[(q->front + 1) % MAX_QUEUE_SIZE];
+}
+int main() {
+	QueueType q;
+	init_queue(&q);
+	int check;
+	char input[MAX_QUEUE_SIZE];
+	printf("검사할 문자열을 입력하시오>>");
+	scanf("%s", &input);
+	strlwr(input); //문자열을 소문자로 변경시키는 함수
+	int size = strlen(input);
+	for (int i = 0; i < size; i++) {
+		add_rear(&q, input[i]);
+	}
+	for (int i = 0; i < size / 2; i++) {
+		if (delete_front(&q) == delete_rear(&q)) {
+			check = 1;
+		}
+		else {
+			printf("회문이 아닙니다.");
+			return;
+		}
+	}
+	printf("회문입니다.");
 }
