@@ -13,6 +13,78 @@ strlwr(문자열) : 문자열을 소문자로 바꾼다.
 if('a'<= input[i] && 'z'>= input[i]) 알파벳만 취급하는 조건문
 
 */
+
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#define MAX_STACK_SIZE 100
+typedef char element;
+typedef struct {
+	element data[MAX_STACK_SIZE];
+	int top;
+}StackType;
+void init_stack(StackType* s) {
+	s->top = -1;
+}
+int is_full(StackType* s) {
+	return s->top == MAX_STACK_SIZE - 1;
+}
+int is_empty(StackType* s) {
+	return s->top == -1;
+}
+void push(StackType* s, element item) {
+	if (is_full(s)) {
+		fprintf(stderr, "스택 포화 에러\n");
+		return;
+	}
+	s->data[++(s->top)] = item;
+}
+element pop(StackType* s) {
+	if (is_empty(s)) {
+		fprintf(stderr, "스택 공백 에러\n");
+		return;
+	}
+	return s->data[(s->top)--];
+}
+element peek(StackType* s) {
+	if (is_empty(s)) {
+		fprintf(stderr, "스택 공백 에러\n");
+		return;
+	}
+	return s->data[(s->top)];
+}
+int main() {
+	StackType s;
+	init_stack(&s);
+	char str[MAX_STACK_SIZE];
+	printf("문자열을 입력하시오 : ");
+	gets_s(str,MAX_STACK_SIZE);
+	for (int i = 0; i < MAX_STACK_SIZE; i++) {
+		if (str[i] == NULL)break;
+		if (tolower(str[i]) >= 'a' && tolower(str[i]) <= 'z') {
+			push(&s, tolower(str[i]));
+		}
+	}
+	int check = 0;
+	for (int i = 0; i < MAX_STACK_SIZE; i++) {
+		if (str[i] == NULL)break;
+		if (isalpha(str[i]) != 0) { //입력한 문자열이 알파벳이면  isalpha함수는 대문자는 1,소문자는 2, 알파벳이 아니면 0을 리턴한다. ctype.h 필요
+			if (pop(&s) != str[i]) { //pop해서 입력 문자열과 비교한다
+				printf("회문이 아닙니다\n");
+				break;
+			}
+		}
+		else check = 1; //일치한다는걸 저장할 장치
+	}
+	if (check == 1) {
+		printf("회문입니다.\n");
+	}
+}
+
+/*
 typedef struct{
     char stack[MAX_STACK_SIZE];
     int top;
@@ -99,3 +171,4 @@ int main(){
     }
     return 0;
 }
+*/
