@@ -14,6 +14,66 @@ input배열이 char형인 이유가 동일 : int형 배열은 Enter키로 입력
 
 */
 
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_STACK_SIZE 100
+typedef int element;
+typedef struct {
+	element data[MAX_STACK_SIZE];
+	int top;
+}StackType;
+
+void init_stack(StackType* s) {
+	s->top = -1;
+}
+int is_full(StackType* s) {
+	return s->top == MAX_STACK_SIZE - 1;
+}
+int is_empty(StackType* s) {
+	return s->top == -1;
+}
+void push(StackType* s, element item) {
+	if (is_full(s)) {
+		fprintf(stderr, "스택 포화 에러\n");
+		return;
+	}
+	s->data[++(s->top)] = item;
+}
+element pop(StackType* s) {
+	if (is_empty(s)) {
+		fprintf(stderr, "스택 공백 에러\n");
+		return;
+	}
+	return s->data[(s->top)--];
+}
+element peek(StackType* s) {
+	if (is_empty(s)) {
+		fprintf(stderr, "스택 공백 에러\n");
+		return;
+	}
+	return s->data[(s->top)];
+}
+int main() {
+	StackType s;
+	init_stack(&s);
+	char arr[MAX_STACK_SIZE];
+	printf("정수를 입력하세요 >> ");
+	scanf("%s", arr);
+	for (int i = 0; i < MAX_STACK_SIZE; i++) {
+		if (arr[i] == NULL)break;
+		push(&s, arr[i]-'0');
+		if (arr[i + 1] == NULL) {
+			printf("%d", arr[i]-'0');
+			break;
+		}
+		if (peek(&s) != arr[i + 1]-'0') {
+			printf("%d", arr[i]-'0');
+		}
+	}
+
+}
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_STACK_SIZE 100
@@ -88,4 +148,4 @@ int main(){
     }
     return 0;
     
-}
+}*/
