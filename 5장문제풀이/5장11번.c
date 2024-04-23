@@ -63,92 +63,95 @@ delete_rear구현 시
     }
     return 0;
 */
-#define _CRT_SECURE_NO_WARNINGS
 #define _CRT_NONSTDC_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_QUEUE_SIZE 10
+#define MAX_SIZE_QUEUE 100
 typedef char element;
 typedef struct {
-	element data[MAX_QUEUE_SIZE];
-	int front;
-	int rear;
+	int front, rear;
+	element data[MAX_SIZE_QUEUE];
 }QueueType;
-void error(char* s) {
-	fprintf(stderr, "%s", s);
-	exit(1);
-}
 void init_queue(QueueType* q) {
 	q->front = q->rear = 0;
+}
+int is_full(QueueType* q) {
+	return (q->rear + 1) % MAX_SIZE_QUEUE == q->front;
 }
 int is_empty(QueueType* q) {
 	return q->front == q->rear;
 }
-int is_full(QueueType* q) {
-	return (q->rear + 1) % MAX_QUEUE_SIZE == q->front;
-}
 void add_rear(QueueType* q, element item) {
 	if (is_full(q)) {
-		error("큐 포화 에러");
+		fprintf(stderr, "덱 포화 에러\n");
+		return;
 	}
-	q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;
+	q->rear = (q->rear + 1) % MAX_SIZE_QUEUE;
 	q->data[q->rear] = item;
-}
-void add_front(QueueType* q,  element item) {
-	if (is_full(q)) {
-		error("큐 포화 에러");
-	}
-	q->data[q->front] = item;
-	q->front = (q->front - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
-}
-element delete_rear(QueueType* q) {
-	if (is_empty(q)) {
-		error("큐 공백 에러");
-	}
-	int index = q->rear;
-	q->rear = (q->rear - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
-	return q->data[index];
 }
 element delete_front(QueueType* q) {
 	if (is_empty(q)) {
-		error("큐 공백 에러");
+		fprintf(stderr, "덱 공백 에러\n");
+		return;
 	}
-	q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+	q->front = (q->front + 1) % MAX_SIZE_QUEUE;
 	return q->data[q->front];
+}
+element get_front(QueueType* q) {
+	if (is_empty(q)) {
+		fprintf(stderr, "덱 공백 에러\n");
+		return;
+	}
+	return q->data[(q->front) + 1 % MAX_SIZE_QUEUE];
+}
+void add_front(QueueType* q, element item) {
+	if (is_full(q)) {
+		fprintf(stderr, "덱 포화 에러\n");
+		return;
+	}
+	q->front = (q->front - 1 + MAX_SIZE_QUEUE) % MAX_SIZE_QUEUE;
+	q->data[q->front] = item;
+}
+element delete_rear(QueueType* q) {
+	int index = q->rear;
+	if (is_empty(q)) {
+		fprintf(stderr, "덱 포화 에러\n");
+		return;
+	}
+	q->rear = (q->rear - 1 + MAX_SIZE_QUEUE) % MAX_SIZE_QUEUE;
+	return q->data[index];
 }
 element get_rear(QueueType* q) {
 	if (is_empty(q)) {
-		error("큐 공백 에러");
+		fprintf(stderr, "덱 공백 에러\n");
+		return;
 	}
 	return q->data[q->rear];
-}
-element get_front(QueueType* q) {
-	if(is_empty(q)) {
-		error("큐 공백 에러");
-	}
-	return q->data[(q->front + 1) % MAX_QUEUE_SIZE];
 }
 int main() {
 	QueueType q;
 	init_queue(&q);
-	int check;
-	char input[MAX_QUEUE_SIZE];
-	printf("검사할 문자열을 입력하시오>>");
-	scanf("%s", &input);
-	strlwr(input); //문자열을 소문자로 변경시키는 함수
-	int size = strlen(input);
+	char str[MAX_SIZE_QUEUE];
+	printf("단어를 입력>>");
+	scanf("%s", str);
+	strlwr(str);
+	int size = strlen(str);
 	for (int i = 0; i < size; i++) {
-		add_rear(&q, input[i]);
+		add_rear(&q, str[i]);
 	}
+	int check = 0;
 	for (int i = 0; i < size / 2; i++) {
-		if (delete_front(&q) == delete_rear(&q)) {
+		if (delete_rear(&q) == delete_front(&q)) {
 			check = 1;
 		}
 		else {
-			printf("회문이 아닙니다.");
-			return;
+			check = 0;
+			printf("회문이 아닙니다\n");
+			break;
 		}
 	}
-	printf("회문입니다.");
+	if (check == 1)
+		printf("회문입니다.\n");
 }
