@@ -67,3 +67,57 @@ int main()
     print_node(head);
     return 0;
 }
+
+///여기부터는 다른 방법 -- 비슷하긴하지만 좀더 깔끔하다.
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct {
+	char name[100];
+	int age;
+	double height;
+}Student;
+typedef struct ListNode {
+	Student student;
+	struct ListNode* link;
+}ListNode;
+ListNode* insert_last(ListNode* head, Student data) {
+	ListNode* p = (ListNode*)malloc(sizeof(ListNode));
+	p->student = data;
+	p->link = NULL;
+	if (head == NULL) {
+		head = p;
+		return head;
+	}
+	else {
+		ListNode* last = head;
+		while (last->link != NULL) {
+			last = last->link;
+		}
+		last->link = p;
+		return head;
+	}
+}
+void node_show(ListNode*head) {
+	ListNode* p = head;
+	for (p; p != NULL; p = p->link) {
+		printf("이름 : %s 나이 : %d 키 : %.1lf\n", p->student.name, p->student.age, p->student.height);
+	}
+}
+int main() {
+	ListNode* head = NULL;
+	char name[100];
+	int age;
+	double height;
+	Student student;
+	for (int i = 0; i < 3; i++) {
+		printf("학생의 정보를 입력해주세요 (이름, 나이, 키) : ");
+		scanf("%s%d%lf", name, &age, &height);
+		strcpy(student.name, name);
+		student.age = age;
+		student.height = height;
+		head = insert_last(head, student);
+	}
+	node_show(head);
+}
